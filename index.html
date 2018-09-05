@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="renderer" content="webkit">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <title>JLPT - Tiếng Nhật - 日本語</title>
+    <meta name="keywords" content="Học Tiếng Nhật, JLPT, Ngữ pháp, từ vựng, chữ hán (kanji), tra câu, cửa lưới đà nẵng, cửa lưới chống muỗi" />
+    <meta name="description" content="Chia sẻ kiến thức Lập trình và Tiếng Nhật" />
+    <meta name="generator" content="v2.30" />
+    <meta name="renderer" content="webkit">
+    <meta name="author" content="http://huuthanhdtd.com/" />
+    <meta http-equiv="Cache-Control" content="no-siteapp"/>
+    <link rel="icon" type="image/png" href="assets/common/favicon.png">
+    <meta name="mobile-web-app-capable" content="yes">
+    <link rel="icon" sizes="192x192" href="assets/common/favicon.png">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <meta name="apple-mobile-web-app-title" content="HuuThanhDTD"/>
+    <meta name="theme-color" content="#563d7c">
+    <link rel="apple-touch-icon-precomposed" href="assets/common/app-icon72x72@2x.png">
+    <meta name="msapplication-TileImage" content="assets/common/app-icon72x72@2x.png">
+    <meta name="msapplication-TileColor" content="#563d7c">
+    <link href="/assets/jlpt/bootstrap.min.css" rel="stylesheet">
+    <style type="text/css">
+        p.example span ruby,p.example span em,h4.sentence ruby,h4.sentence em{
+            border-bottom: 2px solid #ccc;margin-right:2px;font-style: normal;
+        }
+        p.example span ruby.active,p.example span em.active,h4.sentence ruby.active,h4.sentence em.active{
+            background-color:#FFF3B8;
+        }
+        p.example span ruby:hover,p.example span em:hover,h4.sentence ruby:hover,h4.sentence em:hover{
+            background-color: #f2f2f2;cursor:pointer;
+        }
+        h4.sentence i, p.meaning i{
+            font-style: normal;background-color:#FFF3B8;border-radius:4px;padding:0 2px;
+        }
+        span.volume{
+            background:transparent url("/assets/common/volume.png") top left no-repeat;background-size:100%;
+            display:inline-block;height:20px;width:20px;cursor:pointer;margin-left:6px;
+        }
+        p.meaning:first-letter{text-transform: capitalize;}
+        div.actions button.btn-sm{min-width:32px;padding:2px;}
+        ul.actions button.btn-sm{min-width:32px;padding:0 2px;}
+        #logoViewer a{
+            background-image: 
+                url("data:image/svg+xml;utf8,<svg height='21.6' viewBox='0 10.5 16 16'  xmlns='http://www.w3.org/2000/svg' width='32' aria-hidden='true'><path fill-rule='evenodd' d='M14.026 23.572Q14.490 23.572 15.076 23.352L15.076 24.951Q14.551 25.244 13.525 25.244Q10.852 25.244 10.852 22.156L10.852 13.354L5.029 13.354L5.029 25L3.003 25L3.003 13.354L0.305 13.354L0.305 12.451L2.051 11.621L15.479 11.621L15.479 13.354L12.878 13.354L12.878 21.997Q12.878 22.900 13.190 23.236Q13.501 23.572 14.026 23.572Z' fill='rgba(86,61,124,1)'></path></svg>");
+            background-repeat:no-repeat;background-position:center center;text-decoration:none;
+        }
+        input#query{ border-left:none;}
+        input#query.form-control:focus{border-color: #cccccc;outline:0px;-webkit-box-shadow: none;}
+    </style>
+</head>
+<body>
+    
+    <!-- Modal -->
+    <div class="modal fade bd-example-modal-lg" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+            <h5 class="modal-title" id="exampleModalLabel">Loading...</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+            </div>
+            <div class="modal-body">
+            Loading...
+            </div>
+        </div>
+        </div>
+    </div>
+    <!-- To show te result -->
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12">
+              <div class="actions d-block d-sm-none" style="margin:4px 0;">
+                <button class="btn btn-outline-secondary btn-sm" data-key="N1:" type="button">N1</button> <button class="btn btn-outline-success btn-sm" data-key="N2:" type="button">N2</button> <button class="btn btn-outline-danger btn-sm" data-key="N3:" type="button">N3</button> <button class="btn btn-outline-warning btn-sm" data-key="N4:" type="button">N4</button> <button class="btn btn-outline-info btn-sm" data-key="N5:" type="button">N5</button> <button class="btn btn-outline-secondary btn-sm" type="button" data-key="K:">K</button> <button class="btn btn-outline-secondary btn-sm" type="button" data-key="S:">S</button> <button class="btn btn-outline-secondary btn-sm" type="button" data-key="W:">W</button>
+              </div>
+              <form id="jlpt" style="margin-top:4px;">
+                  <div class="input-group">
+                    <div class="input-group-prepend" id="logoViewer">
+                      <a href="/jlpt.html" class="input-group-text text-success font-weight-bold">&nbsp;</a>
+                      </div>
+                      <input type="search" class="form-control" name="query" autofocus id="query" value="" placeholder="Nhập ngữ pháp">
+                      <div class="input-group-append d-none d-sm-block actions">
+                            <button class="btn btn-outline-secondary" data-key="" type="button">N</button><button class="btn btn-outline-secondary" data-key="N1:" type="button">N1</button><button class="btn btn-outline-success" data-key="N2:" type="button">N2</button><button class="btn btn-outline-danger" data-key="N3:" type="button">N3</button><button class="btn btn-outline-warning" data-key="N4:" type="button">N4</button><button class="btn btn-outline-info" data-key="N5:" type="button">N5</button><button class="btn btn-outline-secondary" type="button" data-key="K:">K</button><button class="btn btn-outline-secondary" type="button" data-key="S:">S</button><button class="btn btn-outline-secondary" type="button" data-key="W:">W</button>
+                        </div>
+                      <div class="input-group-append">
+                      <button type="submit" class="btn btn-secondary">Tìm</button>
+                      </div>
+                  </div>
+              </form>
+            </div>
+        </div>
+        <hr>
+        <div class="row">
+            <div class="col-md-12" id="results">
+              <h3>Mẹo</h3>
+              <ul class="actions">
+                <li>Nhập <button class="btn btn-outline-secondary btn-sm" data-key="" type="button">N:</button>+[từ khóa] để tra theo ngữ pháp</li>
+                <li>Nhập <button class="btn btn-outline-secondary btn-sm" data-key="N1:" type="button">N1:</button> <button class="btn btn-outline-success btn-sm" data-key="N2:" type="button">N2:</button> <button class="btn btn-outline-danger btn-sm" data-key="N3:" type="button">N3:</button> <button class="btn btn-outline-warning btn-sm" data-key="N4:" type="button">N4:</button> <button class="btn btn-outline-info btn-sm" data-key="N5:" type="button">N5:</button> để tra ngữ pháp theo cấp độ N.</li>
+                <li>Nhập <button class="btn btn-outline-secondary btn-sm" data-key="K:" type="button">K:</button> để tra chữ hán (kanji)</li>
+                <li>Nhập <button class="btn btn-outline-secondary btn-sm" data-key="S:" type="button">S:</button> để tra câu ví dụ, bao gồm phân tích câu</li>
+                <li>Nhập <button class="btn btn-outline-secondary btn-sm" data-key="W:" type="button">W:</button> để tra từ vựng</li>
+              </ul>
+            <em>(Không phân biệt hoa thường)</em>
+          </div>
+        </div>
+        <div class="row">
+            <div class="col-md-12">
+            <nav>
+                <ul class="pagination justify-content-end">
+                </ul>
+            </nav>
+            </div>
+        </div>
+    </div>
+
+    <script src="/assets/jlpt/jquery.min.js"></script>
+    <script src="/assets/jlpt/bootstrap.min.js"></script>
+
+    <script src="/assets/raphael-min.js"></script>
+    <script src="/assets/kanjiviewer.min.js"></script>
+
+    <script src="/assets/jlpt/wanakana.min.js"></script>
+    <script src="/assets/jlpt/maz.js"></script>
+
+    
+
+</body>
+</html>
