@@ -327,11 +327,9 @@ if (window.history && window.history.pushState) {
 
     $(window).on('popstate', function() {
       $('#exampleModal').modal('hide');
-      isHis = true;
-      var urlMatch = document.location.href.match(/(#)(.+)/g);
-      // console.log(urlMatch);
-      urlMatch && $("#query").val(decodeURIComponent(urlMatch[0].replace("#",""))) && ($('#jlpt').submit(),isLoadHis=false);
-      // $('#jlpt').submit();
+      // isHis = true;
+      // var urlMatch = document.location.href.match(/(#)(.+)/g);
+      // urlMatch && $("#query").val(decodeURIComponent(urlMatch[0].replace("#",""))) && ($('#jlpt').submit());
     });
   }
 
