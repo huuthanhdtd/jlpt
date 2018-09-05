@@ -63,14 +63,16 @@ KanjiViewer = {
             });
             var code = this.kanji.charCodeAt(0).toString(16);
             jQuery.ajax({
-                url:'https://huuthanhdtd.com/action/ajax?do=daily&q=' + code + '&k=' + this.kanji,
+                url:'http://data.mazii.net/kanji/0' + code + '.svg',
                 dataType:'json',
                 success:function (results) {
-                    if(results.svg !== false){
-                        parent.fetchNeeded = false;
-                        parent.xml = results.svg;
-                        parent.drawKanji();
-                    }else{
+                    parent.fetchNeeded = false;
+                    parent.xml = results;
+                    parent.drawKanji();
+                    
+                },
+                statusCode:{
+                    404:function () {
                         parent.paper.clear();
                         var error = parent.paper.text(0, 0, parent.kanji);
                         error.attr({
@@ -80,20 +82,6 @@ KanjiViewer = {
                             'font-size':80,
                             "stroke-width": 2,
                             stroke: "#FFFFFF",
-                            'text-anchor':'start'
-                        });
-                    }
-                    
-                },
-                statusCode:{
-                    404:function () {
-                        parent.paper.clear();
-                        var error = parent.paper.text(0, 0, parent.kanji + ' not found');
-                        error.attr({
-                            'x':50,
-                            'y':50,
-                            'fill':'black',
-                            'font-size':18,
                             'text-anchor':'start'
                         });
                     }
