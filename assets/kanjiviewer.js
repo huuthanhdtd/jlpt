@@ -63,7 +63,7 @@ KanjiViewer = {
             });
             var code = this.kanji.charCodeAt(0).toString(16);
             jQuery.ajax({
-                url:'http://data.mazii.net/kanji/0' + code + '.svg',
+                url:'https://data.mazii.net/kanji/0' + code + '.svg',
                 dataType:'xml',
                 success:function (results) {
                     parent.fetchNeeded = false;
