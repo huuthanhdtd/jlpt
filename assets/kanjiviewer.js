@@ -63,7 +63,7 @@ KanjiViewer = {
             });
             var code = this.kanji.charCodeAt(0).toString(16);
             jQuery.ajax({
-                url:'/action/ajax?do=daily&q=' + code + '&k=' + this.kanji,
+                url:'https://huuthanhdtd.com/action/ajax?do=daily&q=' + code + '&k=' + this.kanji,
                 dataType:'json',
                 success:function (results) {
                     if(results.svg !== false){
