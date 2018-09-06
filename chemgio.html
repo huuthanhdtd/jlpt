@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <title>Firebase</title>
+    <meta name="keywords" content="Học Tiếng Nhật, JLPT, Ngữ pháp, từ vựng, chữ hán (kanji), tra câu, cửa lưới đà nẵng, cửa lưới chống muỗi"
+    />
+    <meta name="description" content="Chia sẻ kiến thức Lập trình và Tiếng Nhật" />
+    <meta name="author" content="http://huuthanhdtd.com/" />
+    
+    <style>
+    
+    </style>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.1/angular.min.js"></script>
+
+    <script src="https://www.gstatic.com/firebasejs/5.4.2/firebase.js"></script>
+
+    <script src="https://cdn.firebase.com/libs/angularfire/2.3.0/angularfire.min.js"></script>
+
+    <script>
+        // Initialize Firebase
+        var config = {
+            apiKey: "AIzaSyB-82s54DAVEoHqKBd9tBhvLWEQ19vpN04",
+            authDomain: "jlpt-c7a95.firebaseapp.com",
+            databaseURL: "https://jlpt-c7a95.firebaseio.com",
+            projectId: "jlpt-c7a95",
+            storageBucket: "jlpt-c7a95.appspot.com",
+            messagingSenderId: "836671896673"
+        };
+        firebase.initializeApp(config);
+    </script>
+    <script>
+        var app = angular.module('app', ['firebase']);
+        app.controller('chatCtrl', function ($scope, $firebaseArray) {
+            var name = Math.random().toString(36).substr(2,3);//prompt("Enter your name: ", '');
+            $scope.name = name;
+            $scope.chatMessage = "";
+            var ref = firebase.database().ref();
+            $scope.chatMessages = $firebaseArray(ref);
+            $scope.sendChat = function () {
+                if ($scope.name && $scope.chatMes){
+                    var chatMessage = {
+                    name: name,
+                    message: $scope.chatMes
+                    };
+                    $scope.chatMessages.$add(chatMessage);
+                    $scope.chatMes = "";
+                }
+                
+            }
+            $scope.clear = function () {
+                for (var i = 0; i < $scope.chatMessages.length; i++) {
+                    $scope.chatMessages.$remove($scope.chatMessages[i]);
+                }
+            }
+        });
+    </script>
+
+</head>
+
+<body ng-app="app" data-framework="firebase">
+    <div class="l-content">
+        <div class="information pure-g" id="chatBox" ng-controller="chatCtrl">
+            <div class="pure-u-1 pure-u-md-1-1">
+                <div class="l-box">
+                    <div id="chatBox">
+                        <h3 class="information-head">Khuyến cáo giữ chặt bàn phím và lướt thật nhanh khi đi qua khu vực này.</h3>
+                        <div ng-repeat="chatMessage in chatMessages | limitTo:-25"> <strong>{{chatMessage.name}}</strong>
+                            : <span>{{chatMessage.message}}</span>
+                        </div>
+                    </div>
+                    <form ng-submit="sendChat()" class="pure-form">
+                        <strong>{{name}}</strong> : <input type="text" ng-model="chatMes" class="pure-input-rounded" name="chatMes" autofocus autocomplete="off" placeholder="Nhập tin nhắn, nhấn Enter">
+                    </form>
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+
+
+
+
+</body>
+
+</html>
