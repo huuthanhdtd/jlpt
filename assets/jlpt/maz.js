@@ -14,7 +14,7 @@ function getRuby(sentence, eles, _id){
       //out1 = "";
       $.each(word_list, function(k,word){
         match = word[0].match(iskanji);
-        active = (data.query.match(new RegExp(word[0]+"\\B","gi")) && word[0] !== ".")?' class="active"':"";
+        active = (data.query.match(new RegExp(word[0],"gi")) && word[0] !== ".")?' class="active"':"";
         if(word[0] == "真" && word[2]=="シン" && word_list[k+1][0]=="っ") word[2] = "マ";
         match && (out1 += "<ruby"+active+" title=\""+ word[1] +"\"><rb>" + word[0] + "</rb><rt>"+wanakana.toHiragana(word[2])+"</rt></ruby>");
         !match && (out1+="<em"+active+" title=\""+word[1]+"\">" + word[0]+"</em>");
@@ -226,14 +226,14 @@ $('#jlpt').submit(function(event){
           data.query = query
           var typePattern = /(N+[1-5])*:|(N:)/gi,
           keywordMatch = typePattern.exec(query);
-          keywordMatch && (data.level=keywordMatch[1].toUpperCase(),data.query=query.replace(keywordMatch[0], "").trim());
+          keywordMatch && (keywordMatch[1]&&(data.level=keywordMatch[1].toUpperCase()),data.query=query.replace(keywordMatch[0], "").trim());
           getGrammar();
       }
     }else{
       data.query = query
           var typePattern = /(N+[1-5])*:|(N:)/gi,
           keywordMatch = typePattern.exec(query);
-          keywordMatch && (data.level=keywordMatch[1].toUpperCase(),data.query=query.replace(keywordMatch[0], "").trim());
+          keywordMatch && (keywordMatch[1]&&(data.level=keywordMatch[1].toUpperCase()),data.query=query.replace(keywordMatch[0], "").trim());
           getGrammar();
     }
     if (isHis == false){
