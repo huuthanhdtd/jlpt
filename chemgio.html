@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-    <title>Firebase</title>
+    <title>Chém gió</title>
     <meta name="keywords" content="Học Tiếng Nhật, JLPT, Ngữ pháp, từ vựng, chữ hán (kanji), tra câu, cửa lưới đà nẵng, cửa lưới chống muỗi"
     />
     <meta name="description" content="Chia sẻ kiến thức Lập trình và Tiếng Nhật" />
@@ -14,15 +14,9 @@
     html,body{
         font-family: Roboto, Arial;
     }
-    input{
-    -webkit-border-radius: 50px;
-    -moz-border-radius: 50px;
-    border-radius: 50px;
-    padding: 3px 8px;
-    width:220px;
-    }
+    input{border-radius: 50px;padding: 3px 8px;width:220px;}
     input,input:focus{border:1px solid #ccc;outline: none;}
-    span.name{font-weight: bold;background-color:#ccc;padding: 0 5px;width:30px;display: inline-block;-webkit-border-radius: 12px;-moz-border-radius: 12px;border-radius: 12px;}
+    span.name{font-weight: bold;background-color:#ccc;padding: 0 5px;width:30px;display: inline-block;-webkit-border-radius: 12px;-moz-border-radius: 12px;border-radius: 12px;cursor: pointer;}
     span.name.me{background-color:#89BE50;}
     div.item{line-height: 24px;margin-bottom:1px;}
     </style>
@@ -30,7 +24,6 @@
     <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.7.2/angular.min.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.7.2/angular-sanitize.js"></script>
     <script src="https://www.gstatic.com/firebasejs/5.4.2/firebase.js"></script>
-
     <script src="https://cdn.firebase.com/libs/angularfire/2.3.0/angularfire.min.js"></script>
 
     <script>
@@ -47,33 +40,64 @@
     </script>
     <script>
         var app = angular.module('app', ['firebase','ngSanitize']);
+        var originalTitle = window.document.title;
         app.controller('chatCtrl', function ($scope, $firebaseArray, $sce) {
             var name = Math.random().toString(36).substr(2,3);//prompt("Enter your name: ", '');
             $scope.name = name;
             $scope.chatMessage = "";
             var ref = firebase.database().ref();
             $scope.chatMessages = $firebaseArray(ref);
-            // angular.forEach($scope.chatMessages, function(value, key) {
-            //   //value = value.replace(/\*\*([^\*\*]+)\*\*/gi, "<strong>$1</strong>");
-            //   value.message = value.message.replace(/\*\*(.*)\*\*/gi, "<strong>$1</strong>");
-            // });
-            // for (var i = 0; i < $scope.chatMessages.length; i++) {
-            //         $scope.chatMessages[i].message = $scope.chatMessages[i].message.replace(/\*\*(.*)\*\*/gi, "<strong>$1</strong>");
-            //     }
+            $scope.beep = new Audio('beep.ogg');
+            //notification
+            $scope.playAudio = function() {
+                $scope.beep && $scope.beep.play();
+            };
+            window.addEventListener('focus', function() {
+                window.document.title = originalTitle;
+            });
+            firebase.database().ref().on('value', function(){
+
+                var lastMessage = $scope.chatMessages[$scope.chatMessages.length-1];
+                var lastMessageId = lastMessage && lastMessage.name;
+                if ($scope.name !== lastMessageId) {
+                    
+                    window.Notification.requestPermission(function (permission) {
+                        // console.log(permission);
+                        if (permission == 'granted' && lastMessage && lastMessage.name) {
+                            var notify = new Notification(lastMessage.name + ' says:', {
+                                    body: lastMessage.message,
+                                });
+                            $scope.playAudio();
+                            window.document.title = "New message";
+                            notify.onclick = function() {
+                                window.focus();
+                            };
+                            notify.onclose = function() {
+                                window.document.title = originalTitle;
+                            };
+                            var timmer = setInterval(function() {
+                                notify && notify.close();
+                                typeof timmer !== 'undefined' && window.clearInterval(timmer);
+                            }, 10000);
+                        }
+                    });
+                }
+            });
 
             $scope.sendChat = function () {
                 if ($scope.name && $scope.chatMes && $scope.chatMes.length <= 200){
                     var chatMessage = {
                     name: name,
-                    message: $scope.chatMes
+                    message: $scope.chatMes,
+                    date: Date.now()
                     };
                     $scope.chatMessages.$add(chatMessage);
                     $scope.chatMes = "";
                 }
                 
             }
-            $scope.delete = function($item){
-                if(confirm("Xóa chém gió thật ư?")) $scope.chatMessages.$remove($item);
+            $scope.delete = function(item){
+                if(event.shiftKey || confirm("Xóa "+item.message+"?")) $scope.chatMessages.$remove(item);
             }
             $scope.clear = function () {
                 for (var i = 0; i < $scope.chatMessages.length; i++) {
@@ -82,13 +106,8 @@
             }
             $scope.markdown = function(value) {
                 return $sce.trustAsHtml(value.replace(/\*\*([^\*\*]+)\*\*|__([^__]+)__/gi, "<strong>$1$2</strong>").replace(/\*([^\*]+)\*|_([^_]+)_/gi, "<em>$1$2</em>").replace(/\~([^\~]+)\~/gi, "<del>$1</del>"));
-              }
+            }
         });
-        // app.filter('trustAsHtml', function($sce) {
-        //   return function(html) {
-        //     return $sce.trustAsHtml(html.replace(/\*\*(.*)\*\*/gi, "<strong>$1</strong>"));
-        //   };
-        // });
     </script>
 
 </head>
@@ -100,7 +119,7 @@
                 <div class="l-box">
                     <div id="chatBox">
                         <h3 class="information-head">Khuyến cáo giữ chặt bàn phím và lướt thật nhanh khi đi qua khu vực này.</h3>
-                        <div class="item" ng-repeat="chatMessage in chatMessages | limitTo:-20"> <span class="name" ng-click="delete(chatMessage)">{{chatMessage.name}}</span> <span ng-bind-html="markdown(chatMessage.message)" title="{{chatMessage.message}}"></span>
+                        <div class="item" ng-repeat="chatMessage in chatMessages | limitTo:-20"> <span class="name" ng-click="delete(chatMessage, $event)">{{chatMessage.name}}</span> <span ng-bind-html="markdown(chatMessage.message)" title="{{chatMessage.message}}"></span>
                         </div>
                     </div>
                     <form ng-submit="sendChat()" class="pure-form">
