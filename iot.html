@@ -2,221 +2,191 @@
 <html>
 
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-    <title>Firebase IoT</title>
-    <meta name="keywords" content="Học Tiếng Nhật, JLPT, Ngữ pháp, từ vựng, chữ hán (kanji), tra câu, cửa lưới đà nẵng, cửa lưới chống muỗi"
-    />
-    <meta name="description" content="Chia sẻ kiến thức Lập trình và Tiếng Nhật" />
-    <meta name="author" content="https://huuthanhdtd.com/" />
-    
-    
-    <style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <title>Firebase IoT</title>
+  <meta name="keywords"
+    content="Học Tiếng Nhật, JLPT, Ngữ pháp, từ vựng, chữ hán (kanji), tra câu, cửa lưới đà nẵng, cửa lưới chống muỗi" />
+  <meta name="description" content="Chia sẻ kiến thức Lập trình và Tiếng Nhật" />
+  <meta name="author" content="https://huuthanhdtd.com/" />
 
-        .toggle {
-          cursor: pointer;
-          display: block;
-          margin-bottom:20px;
-        }
 
-        .toggle-switch {
-          display: inline-block;
-          background: #ccc;
-          border-radius: 16px;
-          width: 58px;
-          height: 32px;
-          position: relative;
-          vertical-align: middle;
-          transition: background 0.25s;
-        }
-        .toggle-switch:before, .toggle-switch:after {
-          content: "";
-        }
-        .toggle-switch:before {
-          display: block;
-          background: linear-gradient(to bottom, #fff 0%, #eee 100%);
-          border-radius: 50%;
-          box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.25);
-          width: 24px;
-          height: 24px;
-          position: absolute;
-          top: 4px;
-          left: 4px;
-          text-align: center;
-          line-height: 24px;
-          font-size: 0.7em;
-          content:'Off';
-          transition: left 0.25s;
-        }
-        .toggle:hover .toggle-switch:before {
-          background: linear-gradient(to bottom, #fff 0%, #fff 100%);
-          box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.5);
-        }
-        .toggle-checkbox:checked + .toggle-switch {
-          background: #56c080;
-        }
-        .toggle-checkbox:disabled + .toggle-switch {
-          background: #666666;
-        }
-        .toggle-checkbox:checked + .toggle-switch:before {
-          left: 30px;
-          content:'On';
-        }
-        .toggle-checkbox:disabled + .toggle-switch:before {
-          content:'/';
-        }
+  <style>
+    .toggle {
+      cursor: pointer;
+      display: block;
+      margin-bottom: 30px;
+    }
 
-        .toggle-checkbox {
-          position: absolute;
-          visibility: hidden;
-        }
+    .toggle-switch {
+      display: inline-block;
+      background: #ccc;
+      border-radius: 16px;
+      width: 58px;
+      height: 32px;
+      position: relative;
+      vertical-align: middle;
+      transition: background 0.25s;
+    }
 
-        .toggle-label {
-          margin-left: 5px;
-          position: relative;
-          top: 2px;
-        }
+    .toggle-switch:before,
+    .toggle-switch:after {
+      content: "";
+    }
 
-        .led-box {
-          height: 30px;
-          width: 25%;
-          margin: 10px 0;
-          float: left;
-        }
+    .toggle-switch:before {
+      display: block;
+      background: linear-gradient(to bottom, #fff 0%, #eee 100%);
+      border-radius: 50%;
+      box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.25);
+      width: 24px;
+      height: 24px;
+      position: absolute;
+      top: 4px;
+      left: 4px;
+      text-align: center;
+      line-height: 24px;
+      font-size: 0.7em;
+      content: 'Off';
+      transition: left 0.25s;
+    }
 
-        .led-0 {
-          margin: 0 auto;
-          width: 24px;
-          height: 24px;
-          background-color: #666666;
-          border-radius: 50%;
-          box-shadow: rgba(0, 0, 0, 0.2) 0 -1px 7px 1px, inset #666666 0 -1px 9px, #666666 0 2px 12px;
-        }
-        .led-1 {
-          margin: 0 auto;
-          width: 24px;
-          height: 24px;
-          background-color: #ABFF00;
-          border-radius: 50%;
-          box-shadow: rgba(0, 0, 0, 0.2) 0 -1px 7px 1px, inset #304701 0 -1px 9px, #89FF00 0 2px 12px;
-        }
+    .toggle:hover .toggle-switch:before {
+      background: linear-gradient(to bottom, #fff 0%, #fff 100%);
+      box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.5);
+    }
 
-    </style>
+    .toggle-checkbox:checked+.toggle-switch {
+      background: #56c080;
+    }
 
-    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.1/angular.min.js"></script>
+    .toggle-checkbox:disabled+.toggle-switch {
+      background: #666666;
+    }
 
-    <script src="https://www.gstatic.com/firebasejs/5.4.2/firebase.js"></script>
+    .toggle-checkbox:checked+.toggle-switch:before {
+      left: 30px;
+      content: 'On';
+    }
 
-    <script src="https://cdn.firebase.com/libs/angularfire/2.3.0/angularfire.min.js"></script>
+    .toggle-checkbox:disabled+.toggle-switch:before {
+      content: '/';
+    }
 
-    <script>
-        // Initialize Firebase
-        var config = {
-            apiKey: "AIzaSyB-82s54DAVEoHqKBd9tBhvLWEQ19vpN04",
-            authDomain: "jlpt-c7a95.firebaseapp.com",
-            databaseURL: "https://jlpt-c7a95.firebaseio.com",
-            projectId: "jlpt-c7a95",
-            storageBucket: "jlpt-c7a95.appspot.com",
-            messagingSenderId: "836671896673"
-        };
-        firebase.initializeApp(config);
-    </script>
-    <script>
-        var app = angular.module('app', ['firebase']);
-        app.controller('IotCtrl', function ($scope, $firebaseObject) {
-          $scope.roles = [
-            {id:'Relay_1', value:0}, 
-            {id:'Relay_2', value:0}, 
-            {id:'Relay_3', value:0}, 
-            {id:'Relay_4', value:0} 
-          ];
-            var ref = firebase.database().ref('Relay_1');
-            $scope.sw = $firebaseObject(ref);
-            var preValue = 0;
-            ref.on('value', function(snap){
-              preValue = parseInt(snap.val());
-                angular.forEach($scope.roles, function(role, idx) {
-                  role.value = (preValue >> idx) & 1;
-                })
-            });
-            
-            // $scope.sw.$loaded()
-            // .then(function(snap){
-            //     // console.log(snap.$value);
-            //     var value = parseInt(snap.$value);
-            //     angular.forEach($scope.roles, function(role, idx) {
-            //       role.value = (value >> idx) & 1;
-            //     })
-            //     console.log($scope.roles);
-            // });
-            
+    .toggle-checkbox {
+      position: absolute;
+      visibility: hidden;
+    }
 
-            $scope.switch = function(checked, index) {
-              var newVal;
-              if (checked)
-                newVal = (preValue) |= (1 << index); //Set bit
-              else
-                newVal = (preValue) &= ~(1 << index); //Clear bit
+    .toggle-label {
+      margin-left: 5px;
+      position: relative;
+      top: 2px;
+    }
 
-              ref.set(newVal);
-            };
+    .led-box {
+      height: 30px;
+      width: 25%;
+      margin: 10px 0;
+      float: left;
+    }
 
-        });
+    .led-0 {
+      margin: 0 auto;
+      width: 24px;
+      height: 24px;
+      background-color: #666666;
+      border-radius: 50%;
+      box-shadow: rgba(0, 0, 0, 0.2) 0 -1px 7px 1px, inset #666666 0 -1px 9px, #666666 0 2px 12px;
+    }
 
-        app.controller('Iot2Ctrl', function ($scope, $firebaseArray) {
+    .led-1 {
+      margin: 0 auto;
+      width: 24px;
+      height: 24px;
+      background-color: #ABFF00;
+      border-radius: 50%;
+      box-shadow: rgba(0, 0, 0, 0.2) 0 -1px 7px 1px, inset #304701 0 -1px 9px, #89FF00 0 2px 12px;
+    }
+  </style>
 
-        var ref = firebase.database().ref();
-        $scope.switches = $firebaseArray(ref);
-        // $scope.switches.$loaded()
-        // .then(function(){
-        //     angular.forEach($scope.switches, function(user) {
-        //         console.log(user);
-        //     })
-        // });
+  <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.1/angular.min.js"></script>
 
-        $scope.switch = function (item) {
-          var switchValue;
-            if (item.isChecked == true){
-              switchValue = 1;
-            }else{
-              switchValue = 0;
-            }
-            // ref.set(switchValue);
-            //item.$value = switchValue;
-            //$scope.switches.$update(item)
-            ref.child(item.$id).set(switchValue);
-        }
+  <script src="https://www.gstatic.com/firebasejs/5.4.2/firebase.js"></script>
 
-        });
-    
-        
-    </script>
+  <script src="https://cdn.firebase.com/libs/angularfire/2.3.0/angularfire.min.js"></script>
+
+  <script>
+    // Initialize Firebase
+    var config = {
+      apiKey: "AIzaSyB-82s54DAVEoHqKBd9tBhvLWEQ19vpN04",
+      authDomain: "jlpt-c7a95.firebaseapp.com",
+      databaseURL: "https://jlpt-c7a95.firebaseio.com",
+      projectId: "jlpt-c7a95",
+      storageBucket: "jlpt-c7a95.appspot.com",
+      messagingSenderId: "836671896673"
+    };
+    firebase.initializeApp(config);
+  </script>
+  <script>
+    var app = angular.module('app', ['firebase']);
+    app.controller('IotCtrl', function ($scope, $firebaseObject) {
+      $scope.relays = [
+        { id: 'Relay_1', value: 0 },
+        { id: 'Relay_2', value: 0 },
+        { id: 'Relay_3', value: 0 },
+        { id: 'Relay_4', value: 0 }
+      ];
+      var ref = firebase.database().ref('Relay_1');
+      $scope.sw = $firebaseObject(ref);
+      var preValue = 0;
+      ref.on('value', function (snap) {
+        preValue = parseInt(snap.val());
+        angular.forEach($scope.relays, function (relay, idx) {
+          relay.value = (preValue >> idx) & 1;
+        })
+      });
+
+      $scope.switch = function (checked, index) {
+        var newVal;
+        if (checked)
+          newVal = (preValue) |= (1 << index); //Set bit
+        else
+          newVal = (preValue) &= ~(1 << index); //Clear bit
+
+        ref.set(newVal);
+      };
+
+    });
+
+  </script>
 
 </head>
 
 <body ng-app="app" data-framework="firebase">
   <div class="l-content">
-      
+
     <div class="information pure-g" id="IotCtrl" ng-controller="IotCtrl">
       <div class="pure-u-1 pure-u-md-1-1">
-          <div class="l-box">
-              <div>
-                  <h3 class="information-head">Firebase IoT.</h3>
-              </div>
-              <label class="toggle" ng-repeat="role in roles">
-                  <input class="toggle-checkbox" name="isChecked[]" type="checkbox" ng-change="switch(isChecked, $index)"  ng-model="isChecked" ng-checked="{{isChecked=role.value==1}}">
-                  <div class="toggle-switch"></div>
-                  <span class="toggle-label">{{role.id}}</span>
-              </label>
-
-          
-
+        <div class="l-box">
+          <div>
+            <h3 class="information-head">Firebase IoT.</h3>
           </div>
+          <label class="toggle" ng-repeat="relay in relays">
+            <input class="toggle-checkbox" name="isChecked[]" type="checkbox" ng-change="switch(isChecked, $index)"
+              ng-model="isChecked" ng-checked="{{isChecked=relay.value==1}}">
+            <div class="toggle-switch"></div>
+            <span class="toggle-label">{{relay.id}}</span>
+          </label>
+
+
+
+        </div>
       </div>
 
     </div>
 
-      
+
   </div>
 
 
