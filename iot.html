@@ -141,13 +141,21 @@
             $scope.isChecked = false;
 
             var starCountRef = firebase.database().ref('Relay_1');
-            starCountRef.on('value', function(snapshot) {
+            starCountRef.once('value', function(snapshot) {
                 $scope.$apply(function(){
                   $scope.switchValue = snapshot.val();
                   $scope.isChecked = $scope.switchValue===0;
                 });
               
             });
+
+            // starCountRef.on('value', function(snapshot) {
+            //     //$scope.$apply(function(){
+            //       $scope.switchValue = snapshot.val();
+            //       $scope.isChecked = $scope.switchValue===0;
+            //     //});
+              
+            // });
             
 
             $scope.switch = function () {
