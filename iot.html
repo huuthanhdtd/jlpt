@@ -122,7 +122,8 @@
     </script>
     <script>
         var app = angular.module('app', ['firebase']);
-        app.controller('chatCtrl', function ($scope, $firebaseArray) {
+        app.controller('chatCtrl', function ($scope, $firebaseObject) {
+        //app.controller('chatCtrl', function ($scope) {
             //var name = Math.random().toString(36).substr(2,3);//prompt("Enter your name: ", '');
             //$scope.name = 'Relay_1'; //name;
             //$scope.chatMessage = "";
@@ -137,37 +138,43 @@
             //     });
             // });
 
-            $scope.switchValue = 0;
-            $scope.isChecked = false;
+            //$scope.switchValue = 0;
+            //$scope.isChecked = false;
 
             var starCountRef = firebase.database().ref('Relay_1');
-            starCountRef.once('value', function(snapshot) {
-                $scope.$apply(function(){
-                  $scope.switchValue = snapshot.val();
-                  $scope.isChecked = $scope.switchValue===0;
-                });
-              
-            });
-
+            $scope.switchValue2 = $firebaseObject(starCountRef);
+            //$scope.isChecked = $scope.switchValue2==1;
+            //console.log($scope.switchValue2);
             // starCountRef.on('value', function(snapshot) {
             //     //$scope.$apply(function(){
-            //       $scope.switchValue = snapshot.val();
-            //       $scope.isChecked = $scope.switchValue===0;
+            //       //$scope.switchValue = snapshot.val();
+            //       $scope.isChecked = snapshot.val()===1;
+            //       //$scope.$apply();
             //     //});
               
+            // });
+
+            // $scope.switchValue2.$loaded()
+            // .then(function(data) {
+            //   $scope.isChecked=data.$value==1;
+            //   //console.log(data === $scope.switchValue2); // true
+            // })
+            // .catch(function(error) {
+            //   console.error("Error:", error);
             // });
             
 
             $scope.switch = function () {
+              var switchValue;
                 if ($scope.isChecked == true){
-                    $scope.switchValue = 0;
+                  switchValue = 1;
                     //firebase.database().ref('Relay_1').set(1);
                 }else{
-                    $scope.switchValue = 1;
+                  switchValue = 0;
                     //firebase.database().ref('Relay_1').set(0);
                 }
                 //$scope.isChecked = $scope.switchValue===1;
-                firebase.database().ref('Relay_1').set($scope.switchValue);
+                starCountRef.set(switchValue);
                 
             }
             // $scope.clear = function () {
@@ -191,9 +198,9 @@
                     <input type="button" ng-show="x" ng-click="switch($index)" class="pure-button{{switchValue === 1 ? ' button-success' : ''}}" ng-model="switchValue" class="pure-input-rounded" name="switchValue" id="switchValue" ng-value="switchValue">
                     
                     <label class="toggle">
-                        <input class="toggle-checkbox" type="checkbox" ng-model="isChecked" ng-change="switch()" ng-checked="isChecked">
+                        <input class="toggle-checkbox" type="checkbox" ng-model="isChecked" ng-change="switch()" ng-checked="{{isChecked=switchValue2.$value==1}}">
                         <div class="toggle-switch"></div>
-                        <span class="toggle-label">Relay_1</span>
+                        <span class="toggle-label">Relay_1: {{switchValue2.$value}}</span>
                     </label>
                     <br><br>
                     <label class="toggle">
