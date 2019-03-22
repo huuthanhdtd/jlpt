@@ -8,14 +8,15 @@
     <meta name="keywords" content="Học Tiếng Nhật, JLPT, Ngữ pháp, từ vựng, chữ hán (kanji), tra câu, cửa lưới đà nẵng, cửa lưới chống muỗi"
     />
     <meta name="description" content="Chia sẻ kiến thức Lập trình và Tiếng Nhật" />
-    <meta name="author" content="http://huuthanhdtd.com/" />
+    <meta name="author" content="https://huuthanhdtd.com/" />
     
     
     <style>
 
         .toggle {
           cursor: pointer;
-          display: inline-block;
+          display: block;
+          margin-bottom:20px;
         }
 
         .toggle-switch {
@@ -123,45 +124,9 @@
     <script>
         var app = angular.module('app', ['firebase']);
         app.controller('chatCtrl', function ($scope, $firebaseObject) {
-        //app.controller('chatCtrl', function ($scope) {
-            //var name = Math.random().toString(36).substr(2,3);//prompt("Enter your name: ", '');
-            //$scope.name = 'Relay_1'; //name;
-            //$scope.chatMessage = "";
-            // var ref = firebase.database().ref();
-            // var rRef = ref.child("Relay_1");
-            // //chatMessages = $firebaseArray(ref);
-            // $scope.chatMessages = [];
-            // rRef.on('value', function(Relay) {
-            //     Relay.forEach(function(status) {
-            //         console.log(status.key+": "+status.val());
-            //       //$scope.chatMessages.push(status);
-            //     });
-            // });
-
-            //$scope.switchValue = 0;
-            //$scope.isChecked = false;
 
             var starCountRef = firebase.database().ref('Relay_1');
             $scope.switchValue2 = $firebaseObject(starCountRef);
-            //$scope.isChecked = $scope.switchValue2==1;
-            //console.log($scope.switchValue2);
-            // starCountRef.on('value', function(snapshot) {
-            //     //$scope.$apply(function(){
-            //       //$scope.switchValue = snapshot.val();
-            //       $scope.isChecked = snapshot.val()===1;
-            //       //$scope.$apply();
-            //     //});
-              
-            // });
-
-            // $scope.switchValue2.$loaded()
-            // .then(function(data) {
-            //   $scope.isChecked=data.$value==1;
-            //   //console.log(data === $scope.switchValue2); // true
-            // })
-            // .catch(function(error) {
-            //   console.error("Error:", error);
-            // });
             
 
             $scope.switch = function () {
@@ -177,11 +142,33 @@
                 starCountRef.set(switchValue);
                 
             }
-            // $scope.clear = function () {
-            //     for (var i = 0; i < $scope.chatMessages.length; i++) {
-            //         $scope.chatMessages.$remove($scope.chatMessages[i]);
-            //     }
-            // }
+
+        });
+
+        app.controller('IotCtrl', function ($scope, $firebaseArray) {
+
+        var ref = firebase.database().ref();
+        $scope.switches = $firebaseArray(ref);
+        $scope.switches.$loaded()
+        .then(function(){
+            angular.forEach($scope.switches, function(user) {
+                console.log(user);
+            })
+        });
+
+        $scope.switch = function (item) {
+          var switchValue;
+            if (item.isChecked == true){
+              switchValue = 1;
+            }else{
+              switchValue = 0;
+            }
+            // ref.set(switchValue);
+            //item.$value = switchValue;
+            //$scope.switches.$update(item)
+            ref.child(item.$id).set(switchValue);
+        }
+
         });
     </script>
 
@@ -189,25 +176,19 @@
 
 <body ng-app="app" data-framework="firebase">
     <div class="l-content">
-        <div class="information pure-g" id="chatBox" ng-controller="chatCtrl">
+        <div class="information pure-g" id="IotCtrl" ng-controller="IotCtrl">
             <div class="pure-u-1 pure-u-md-1-1">
                 <div class="l-box">
                     <div>
                         <h3 class="information-head">Firebase IoT.</h3>
                     </div>
-                    <input type="button" ng-show="x" ng-click="switch($index)" class="pure-button{{switchValue === 1 ? ' button-success' : ''}}" ng-model="switchValue" class="pure-input-rounded" name="switchValue" id="switchValue" ng-value="switchValue">
+                    <label class="toggle" ng-repeat="sw in switches | limitTo:-20">
+                        <input class="toggle-checkbox" type="checkbox" ng-model="sw.isChecked" ng-change="switch(sw, $event)" ng-checked="{{sw.isChecked=sw.$value==1}}">
+                        <div class="toggle-switch"></div>
+                        <span class="toggle-label">{{sw.$id}}</span>
+                    </label>
                     
-                    <label class="toggle">
-                        <input class="toggle-checkbox" type="checkbox" ng-model="isChecked" ng-change="switch()" ng-checked="{{isChecked=switchValue2.$value==1}}">
-                        <div class="toggle-switch"></div>
-                        <span class="toggle-label">Relay_1: {{switchValue2.$value}}</span>
-                    </label>
-                    <br><br>
-                    <label class="toggle">
-                        <input class="toggle-checkbox" type="checkbox" disabled>
-                        <div class="toggle-switch"></div>
-                        <span class="toggle-label">Relay_2</span>
-                    </label>
+                    
                 
 
                 </div>
