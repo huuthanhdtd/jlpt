@@ -5,8 +5,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
   <title>Firebase IoT</title>
-  <meta name="keywords"
-    content="Học Tiếng Nhật, JLPT, Ngữ pháp, từ vựng, chữ hán (kanji), tra câu, cửa lưới đà nẵng, cửa lưới chống muỗi" />
+  <meta name="keywords" content="Firebase IoT, IIoT Dev, ESP8266, Arduino" />
   <meta name="description" content="Chia sẻ kiến thức Lập trình và Tiếng Nhật" />
   <meta name="author" content="https://huuthanhdtd.com/" />
 
@@ -111,9 +110,7 @@
   </style>
 
   <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.1/angular.min.js"></script>
-
   <script src="https://www.gstatic.com/firebasejs/5.4.2/firebase.js"></script>
-
   <script src="https://cdn.firebase.com/libs/angularfire/2.3.0/angularfire.min.js"></script>
 
   <script>
@@ -138,7 +135,7 @@
         { id: 'Relay_4', value: 0 }
       ];
       var ref = firebase.database().ref('Relay_1');
-      $scope.sw = $firebaseObject(ref);
+      var sw = $firebaseObject(ref);
       var preValue = 0;
       ref.on('value', function (snap) {
         preValue = parseInt(snap.val());
@@ -165,7 +162,6 @@
 
 <body ng-app="app" data-framework="firebase">
   <div class="l-content">
-
     <div class="information pure-g" id="IotCtrl" ng-controller="IotCtrl">
       <div class="pure-u-1 pure-u-md-1-1">
         <div class="l-box">
@@ -179,8 +175,6 @@
             <span class="toggle-label">{{relay.id}}</span>
           </label>
 
-
-
         </div>
       </div>
 
@@ -188,9 +182,6 @@
 
 
   </div>
-
-
-
 
 </body>
 
