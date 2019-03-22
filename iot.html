@@ -123,38 +123,56 @@
     </script>
     <script>
         var app = angular.module('app', ['firebase']);
-        app.controller('chatCtrl', function ($scope, $firebaseObject) {
-
-            var starCountRef = firebase.database().ref('Relay_1');
-            $scope.switchValue2 = $firebaseObject(starCountRef);
+        app.controller('IotCtrl', function ($scope, $firebaseObject) {
+          $scope.roles = [
+            {id:'Relay_1', value:0}, 
+            {id:'Relay_2', value:0}, 
+            {id:'Relay_3', value:0}, 
+            {id:'Relay_4', value:0} 
+          ];
+            var ref = firebase.database().ref('Relay_1');
+            $scope.sw = $firebaseObject(ref);
+            var preValue = 0;
+            ref.on('value', function(snap){
+              preValue = parseInt(snap.val());
+                angular.forEach($scope.roles, function(role, idx) {
+                  role.value = (preValue >> idx) & 1;
+                })
+            });
+            
+            // $scope.sw.$loaded()
+            // .then(function(snap){
+            //     // console.log(snap.$value);
+            //     var value = parseInt(snap.$value);
+            //     angular.forEach($scope.roles, function(role, idx) {
+            //       role.value = (value >> idx) & 1;
+            //     })
+            //     console.log($scope.roles);
+            // });
             
 
-            $scope.switch = function () {
-              var switchValue;
-                if ($scope.isChecked == true){
-                  switchValue = 1;
-                    //firebase.database().ref('Relay_1').set(1);
-                }else{
-                  switchValue = 0;
-                    //firebase.database().ref('Relay_1').set(0);
-                }
-                //$scope.isChecked = $scope.switchValue===1;
-                starCountRef.set(switchValue);
-                
-            }
+            $scope.switch = function(checked, index) {
+              var newVal;
+              if (checked)
+                newVal = (preValue) |= (1 << index); //Set bit
+              else
+                newVal = (preValue) &= ~(1 << index); //Clear bit
+
+              ref.set(newVal);
+            };
 
         });
 
-        app.controller('IotCtrl', function ($scope, $firebaseArray) {
+        app.controller('Iot2Ctrl', function ($scope, $firebaseArray) {
 
         var ref = firebase.database().ref();
         $scope.switches = $firebaseArray(ref);
-        $scope.switches.$loaded()
-        .then(function(){
-            angular.forEach($scope.switches, function(user) {
-                console.log(user);
-            })
-        });
+        // $scope.switches.$loaded()
+        // .then(function(){
+        //     angular.forEach($scope.switches, function(user) {
+        //         console.log(user);
+        //     })
+        // });
 
         $scope.switch = function (item) {
           var switchValue;
@@ -170,33 +188,36 @@
         }
 
         });
+    
+        
     </script>
 
 </head>
 
 <body ng-app="app" data-framework="firebase">
-    <div class="l-content">
-        <div class="information pure-g" id="IotCtrl" ng-controller="IotCtrl">
-            <div class="pure-u-1 pure-u-md-1-1">
-                <div class="l-box">
-                    <div>
-                        <h3 class="information-head">Firebase IoT.</h3>
-                    </div>
-                    <label class="toggle" ng-repeat="sw in switches | limitTo:-20">
-                        <input class="toggle-checkbox" type="checkbox" ng-model="sw.isChecked" ng-change="switch(sw, $event)" ng-checked="{{sw.isChecked=sw.$value==1}}">
-                        <div class="toggle-switch"></div>
-                        <span class="toggle-label">{{sw.$id}}</span>
-                    </label>
-                    
-                    
-                
+  <div class="l-content">
+      
+    <div class="information pure-g" id="IotCtrl" ng-controller="IotCtrl">
+      <div class="pure-u-1 pure-u-md-1-1">
+          <div class="l-box">
+              <div>
+                  <h3 class="information-head">Firebase IoT.</h3>
+              </div>
+              <label class="toggle" ng-repeat="role in roles">
+                  <input class="toggle-checkbox" name="isChecked[]" type="checkbox" ng-change="switch(isChecked, $index)"  ng-model="isChecked" ng-checked="{{isChecked=role.value==1}}">
+                  <div class="toggle-switch"></div>
+                  <span class="toggle-label">{{role.id}}</span>
+              </label>
 
-                </div>
-            </div>
+          
 
-        </div>
+          </div>
+      </div>
 
     </div>
+
+      
+  </div>
 
 
 
