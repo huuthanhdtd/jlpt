@@ -24,6 +24,9 @@ int save_state_1 = -1;
 void setup()
 {
   // put your setup code here, to run once:
+  //ESP.deepSleep(0); 
+  //system_deep_sleep(2);
+  
   Serial.begin(115200);
   pinMode(WIFI_LED, OUTPUT); //define pinmodes
   pinMode(RELAY_1, OUTPUT);  //define pinmodes
@@ -54,35 +57,32 @@ void setup()
 void loop()
 {
   // put your main code here, to run repeatedly:
+  if (WiFi.status() != WL_CONNECTED){
+    //setup();
+    //digitalWrite(WIFI_LED, LOW);
+    Serial.println("Wifi not connected");
+    delay(1000);
+    return;
+  }
+  if(Firebase.failed())
+  {
+    //Serial.println(Firebase.getInt("Relay_1"));
+    //ESP.restart();
+    //ESP.reset();
+    delay(1000);
+    return;
+  }
 
   //Relay_1
   state_1 = Firebase.getInt("Relay_1");
-  if (save_state_1 != state_1)
+  if (state_1 > -1 && save_state_1 != state_1)
   {
     save_state_1 = state_1;
     digitalWrite(RELAY_1, bitRead(state_1, 0));
     digitalWrite(RELAY_2, bitRead(state_1, 1));
     digitalWrite(RELAY_3, bitRead(state_1, 2));
     digitalWrite(RELAY_4, bitRead(state_1, 3));
-    //    if (bitRead(state_1,0) == 1)
-    //      digitalWrite(RELAY_1, HIGH);
-    //    else
-    //      digitalWrite(RELAY_1, LOW);
-    //    //Relay_2
-    //      if (bitRead(state_1,1) == 1)
-    //      digitalWrite(RELAY_2, HIGH);
-    //    else
-    //      digitalWrite(RELAY_2, LOW);
-    //    //Relay_3
-    //      if (bitRead(state_1,2) == 1)
-    //      digitalWrite(RELAY_3, HIGH);
-    //    else
-    //      digitalWrite(RELAY_3, LOW);
-    //    //Relay_4
-    //      if (bitRead(state_1,3) == 1)
-    //      digitalWrite(RELAY_4, HIGH);
-    //    else
-    //      digitalWrite(RELAY_4, LOW);
+    
   }
 
   delay(100);
