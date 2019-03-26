@@ -8,6 +8,17 @@
   <meta name="keywords" content="Firebase IoT, IIoT Dev, ESP8266, Arduino" />
   <meta name="description" content="Chia sẻ kiến thức Lập trình và Tiếng Nhật" />
   <meta name="author" content="https://huuthanhdtd.com/" />
+  <meta http-equiv="Cache-Control" content="no-siteapp"/>
+  <link rel="icon" type="image/png" href="favicon.ico">
+  <meta name="mobile-web-app-capable" content="yes">
+  <link rel="icon" sizes="192x192" href="/assets/favicon.png">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+  <meta name="apple-mobile-web-app-title" content="HuuThanhDTD"/>
+  <meta name="theme-color" content="#2C4762">
+  <link rel="apple-touch-icon-precomposed" href="/assets/app-icon72x72@2x.png">
+  <meta name="msapplication-TileImage" content="/assets/app-icon72x72@2x.png">
+  <meta name="msapplication-TileColor" content="#2C4762">
 
   <style>
     .toggle {
@@ -128,10 +139,10 @@
     var app = angular.module('app', ['firebase']);
     app.controller('IotCtrl', function ($scope, $firebaseObject) {
       $scope.relays = [
-        { id: 'Relay_1', value: 0 },
-        { id: 'Relay_2', value: 0 },
-        { id: 'Relay_3', value: 0 },
-        { id: 'Relay_4', value: 0 }
+        { id: 'Đèn 1 (phía TV)', value: 0 },
+        { id: 'Đèn cổng', value: 0 },
+        { id: 'Đèn 2', value: 0 },
+        //{ id: 'Relay_4', value: 0 }
       ];
       var ref = firebase.database().ref('Relay_1');
       var sw = $firebaseObject(ref);
